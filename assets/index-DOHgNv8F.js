@@ -30,8 +30,8 @@
         </div>
         <div class="output-bottom">
           <div class="output-actions">
-            <button class="copy-button" type="button" id="copy-button" title="参加URLをコピー" aria-label="参加URLをコピー"><span aria-hidden="true">⧉</span></button>
-            <button class="download-button" type="button" id="download-button" title="PNGを保存" aria-label="PNGを保存"><span aria-hidden="true">↓</span></button>
+            <button class="copy-button" type="button" id="copy-button" title="参加URLをコピー"><span class="button-icon" aria-hidden="true">⧉</span><span>コピー</span></button>
+            <button class="download-button" type="button" id="download-button" title="PNGを保存"><span class="button-icon" aria-hidden="true">↓</span><span>PNG保存</span></button>
           </div>
         </div>
         <p class="join-url" id="join-url"></p>
