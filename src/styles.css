@@ -1,0 +1,232 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, system-ui,
+    sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.shell {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    linear-gradient(135deg, rgba(35, 120, 255, 0.12), transparent 34%),
+    #eef2f7;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(320px, 640px);
+  gap: 24px;
+  align-items: start;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(128, 145, 172, 0.32);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(31, 45, 70, 0.12);
+}
+
+.controls {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.brand-row,
+.preview-head,
+.actions,
+.field-grid {
+  display: flex;
+  gap: 12px;
+}
+
+.brand-row,
+.preview-head {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: #2378ff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: 1.72rem;
+}
+
+h2 {
+  font-size: 1.18rem;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: #49556a;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #c8d1df;
+  border-radius: 8px;
+  padding: 12px 13px;
+  background: #fbfcff;
+  color: #172033;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #2378ff;
+  box-shadow: 0 0 0 3px rgba(35, 120, 255, 0.18);
+}
+
+.actions {
+  flex-wrap: wrap;
+}
+
+button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 16px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.primary {
+  flex: 1 1 160px;
+  background: #2378ff;
+  color: #fff;
+}
+
+.secondary {
+  flex: 1 1 120px;
+  background: #172033;
+  color: #fff;
+}
+
+.icon-button {
+  width: 44px;
+  min-width: 44px;
+  padding: 0;
+  background: #edf4ff;
+  color: #2378ff;
+  font-size: 1.35rem;
+}
+
+.status {
+  min-height: 22px;
+  margin: 0;
+  color: #49556a;
+  font-size: 0.9rem;
+}
+
+.status[data-state="error"] {
+  color: #b42318;
+}
+
+.preview {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #eff6ff;
+  color: #2378ff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+canvas {
+  display: block;
+  width: min(100%, 540px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 1px solid rgba(128, 145, 172, 0.2);
+  background: #fff;
+}
+
+.join-url {
+  min-height: 42px;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #49556a;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  .shell {
+    padding: 16px;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .controls,
+  .preview {
+    padding: 18px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.42rem;
+  }
+}
