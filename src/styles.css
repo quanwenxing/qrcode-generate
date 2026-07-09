@@ -171,6 +171,12 @@ canvas {
   gap: 20px;
 }
 
+.output-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .output-bottom div {
   display: grid;
   gap: 7px;
@@ -192,6 +198,7 @@ canvas {
   text-transform: uppercase;
 }
 
+.copy-button,
 .download-button {
   display: grid;
   width: 38px;
@@ -205,6 +212,11 @@ canvas {
   line-height: 1;
 }
 
+.copy-button {
+  font-size: 1.28rem;
+}
+
+.copy-button:hover,
 .download-button:hover {
   background: rgba(255, 255, 255, 0.34);
 }

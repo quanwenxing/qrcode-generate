@@ -42,7 +42,10 @@ document.querySelector("#app").innerHTML = `
             <strong id="meeting-id">${DEFAULTS.meetingId}</strong>
             <span>Active Session</span>
           </div>
-          <button class="download-button" type="button" id="download-button" title="PNGを保存" aria-label="PNGを保存"><span aria-hidden="true">↓</span></button>
+          <div class="output-actions">
+            <button class="copy-button" type="button" id="copy-button" title="参加URLをコピー" aria-label="参加URLをコピー"><span aria-hidden="true">⧉</span></button>
+            <button class="download-button" type="button" id="download-button" title="PNGを保存" aria-label="PNGを保存"><span aria-hidden="true">↓</span></button>
+          </div>
         </div>
         <p class="join-url" id="join-url"></p>
       </section>
@@ -58,6 +61,7 @@ const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
 const joinUrlText = document.querySelector("#join-url");
 const meetingIdText = document.querySelector("#meeting-id");
+const copyButton = document.querySelector("#copy-button");
 const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
 
@@ -79,6 +83,22 @@ downloadButton.addEventListener("click", () => {
   link.download = makeFileName(form.elements.topic.value);
   link.href = canvas.toDataURL("image/png");
   link.click();
+});
+
+copyButton.addEventListener("click", async () => {
+  try {
+    const values = Object.fromEntries(new FormData(form).entries());
+    const joinUrl = buildZoomJoinUrl(values);
+    if (!navigator.clipboard?.writeText) {
+      throw new Error("このブラウザではクリップボードにコピーできません。");
+    }
+    await navigator.clipboard.writeText(joinUrl);
+    status.textContent = "参加URLをコピーしました。";
+    status.dataset.state = "ok";
+  } catch (error) {
+    status.textContent = error.message || "参加URLをコピーできませんでした。";
+    status.dataset.state = "error";
+  }
 });
 
 resetButton.addEventListener("click", () => {
