@@ -4,7 +4,7 @@ export function normalizeMeetingId(value) {
   return value.replace(/[^\d]/g, "");
 }
 
-export function buildZoomJoinUrl({ joinUrl, meetingId, passcode }) {
+export function buildZoomJoinUrl({ joinUrl = "", meetingId, passcode }) {
   const trimmedJoinUrl = joinUrl.trim();
   if (trimmedJoinUrl) {
     return normalizeJoinUrl(trimmedJoinUrl);
@@ -12,7 +12,7 @@ export function buildZoomJoinUrl({ joinUrl, meetingId, passcode }) {
 
   const normalizedMeetingId = normalizeMeetingId(meetingId);
   if (!normalizedMeetingId) {
-    throw new Error("Zoom URL またはミーティング ID を入力してください。");
+    throw new Error("ミーティング ID を入力してください。");
   }
 
   const url = new URL(`/j/${normalizedMeetingId}`, ZOOM_HOST);

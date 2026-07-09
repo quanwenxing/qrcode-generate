@@ -20,11 +20,6 @@ document.querySelector("#app").innerHTML = `
       <form class="controls" id="qr-form">
         <input name="topic" type="hidden" value="${DEFAULTS.topic}" />
 
-        <label class="field-card field-url">
-          <span class="field-label">Meeting URL</span>
-          <input name="joinUrl" autocomplete="url" placeholder="https://zoom.us/j/..." />
-        </label>
-
         <label class="field-card field-id">
           <span class="field-label">Meeting ID</span>
           <input name="meetingId" inputmode="numeric" value="${DEFAULTS.meetingId}" />
@@ -90,7 +85,6 @@ resetButton.addEventListener("click", () => {
   form.elements.topic.value = DEFAULTS.topic;
   form.elements.meetingId.value = DEFAULTS.meetingId;
   form.elements.passcode.value = DEFAULTS.passcode;
-  form.elements.joinUrl.value = DEFAULTS.joinUrl;
   updateQr();
 });
 

@@ -28,6 +28,15 @@ describe("buildZoomJoinUrl", () => {
     ).toBe("https://zoom.us/j/1234567890?pwd=secret");
   });
 
+  it("does not require a join URL", () => {
+    expect(
+      buildZoomJoinUrl({
+        meetingId: "123 456 7890",
+        passcode: "",
+      }),
+    ).toBe("https://zoom.us/j/1234567890");
+  });
+
   it("rejects non-Zoom URLs", () => {
     expect(() =>
       buildZoomJoinUrl({
