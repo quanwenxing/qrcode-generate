@@ -11,16 +11,23 @@ const DEFAULTS = {
 
 document.querySelector("#app").innerHTML = `
   <main class="shell">
+    <header class="app-header">
+      <a class="brand" href="./" aria-label="WEMAKEQR のホーム">
+        <span class="brand-mark" aria-hidden="true">W</span>
+        <span>WEMAKEQR</span>
+      </a>
+      <div class="header-tools">
+        <span class="local-tag">LOCAL GENERATOR</span>
+        <button class="reset-button" type="button" id="reset-button" title="入力をリセット">Reset</button>
+      </div>
+    </header>
+
     <section class="workspace" aria-label="Zoom QR generator">
-      <form class="panel controls" id="qr-form">
-        <div class="brand-row">
-          <div>
-            <p class="eyebrow">Zoom QR</p>
-            <h1>接続用 QR コード生成</h1>
-          </div>
-          <button class="icon-button" type="button" id="reset-button" title="入力をリセット" aria-label="入力をリセット">
-            <span aria-hidden="true">↺</span>
-          </button>
+      <form class="controls" id="qr-form">
+        <div class="panel-heading">
+          <p class="eyebrow">Zoom Link</p>
+          <h1>会議用 QR コード</h1>
+          <p class="intro">会議情報を入力すると、接続用のQRコードをすぐに生成します。</p>
         </div>
 
         <label>
@@ -45,23 +52,35 @@ document.querySelector("#app").innerHTML = `
         </div>
 
         <div class="actions">
-          <button class="primary" type="submit">QR を更新</button>
-          <button class="secondary" type="button" id="download-button">PNG 保存</button>
+          <button class="primary" type="submit">QR を生成 <span aria-hidden="true">→</span></button>
         </div>
 
         <p class="status" id="status" role="status"></p>
+        <p class="local-note"><span aria-hidden="true">●</span> この端末内でQRコードを生成します</p>
       </form>
 
-      <section class="panel preview" aria-label="Generated QR code">
+      <section class="preview" aria-label="Generated QR code">
         <div class="preview-head">
           <div>
-            <p class="eyebrow">Preview</p>
+            <p class="eyebrow">QR Output</p>
             <h2 id="preview-title">${DEFAULTS.topic}</h2>
           </div>
-          <span class="badge">High ECC</span>
+          <span class="badge">READY</span>
         </div>
-        <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom meeting QR code"></canvas>
-        <p class="join-url" id="join-url"></p>
+        <div class="qr-stage">
+          <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom meeting QR code"></canvas>
+        </div>
+        <div class="output-meta">
+          <p><span>Meeting ID</span><strong id="meeting-id">${DEFAULTS.meetingId}</strong></p>
+          <p class="join-url" id="join-url"></p>
+        </div>
+        <div class="download-row">
+          <div>
+            <span class="download-label">Download</span>
+            <strong>PNG / 高解像度</strong>
+          </div>
+          <button class="download-button" type="button" id="download-button">保存 <span aria-hidden="true">↓</span></button>
+        </div>
       </section>
     </section>
   </main>
@@ -72,6 +91,7 @@ const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
 const joinUrlText = document.querySelector("#join-url");
 const previewTitle = document.querySelector("#preview-title");
+const meetingIdText = document.querySelector("#meeting-id");
 const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
 
@@ -114,6 +134,7 @@ function updateQr() {
     const joinUrl = buildZoomJoinUrl(values);
     renderZoomQr(canvas, joinUrl);
     previewTitle.textContent = topic;
+    meetingIdText.textContent = values.meetingId.trim() || "URLから接続";
     joinUrlText.textContent = joinUrl;
     status.textContent = "QR を生成しました。";
     status.dataset.state = "ok";
