@@ -12,77 +12,49 @@ const DEFAULTS = {
 document.querySelector("#app").innerHTML = `
   <main class="shell">
     <header class="app-header">
-      <a class="brand" href="./" aria-label="WEMAKEQR のホーム">
-        <span class="brand-mark" aria-hidden="true">W</span>
-        <span>WEMAKEQR</span>
-      </a>
-      <div class="header-tools">
-        <span class="local-tag">LOCAL GENERATOR</span>
-        <button class="reset-button" type="button" id="reset-button" title="入力をリセット">Reset</button>
-      </div>
+      <a class="brand" href="./" aria-label="Zoom Linker のホーム">Zoom Linker</a>
+      <span class="status-dot" title="ローカルで動作中" aria-label="ローカルで動作中"></span>
     </header>
 
     <section class="workspace" aria-label="Zoom QR generator">
       <form class="controls" id="qr-form">
-        <div class="panel-heading">
-          <p class="eyebrow">Zoom Link</p>
-          <h1>会議用 QR コード</h1>
-          <p class="intro">会議情報を入力すると、接続用のQRコードをすぐに生成します。</p>
-        </div>
+        <input name="topic" type="hidden" value="${DEFAULTS.topic}" />
 
-        <label>
-          <span>会議名</span>
-          <input name="topic" autocomplete="off" value="${DEFAULTS.topic}" />
+        <label class="field-card field-url">
+          <span class="field-label">Meeting URL</span>
+          <input name="joinUrl" autocomplete="url" placeholder="https://zoom.us/j/..." />
         </label>
 
-        <label>
-          <span>Zoom 参加 URL</span>
-          <textarea name="joinUrl" rows="3" placeholder="https://zoom.us/j/..."></textarea>
+        <label class="field-card field-id">
+          <span class="field-label">Meeting ID</span>
+          <input name="meetingId" inputmode="numeric" value="${DEFAULTS.meetingId}" />
         </label>
 
-        <div class="field-grid">
-          <label>
-            <span>ミーティング ID</span>
-            <input name="meetingId" inputmode="numeric" value="${DEFAULTS.meetingId}" />
-          </label>
-          <label>
-            <span>パスコード</span>
-            <input name="passcode" autocomplete="off" value="${DEFAULTS.passcode}" />
-          </label>
-        </div>
-
-        <div class="actions">
-          <button class="primary" type="submit">QR を生成 <span aria-hidden="true">→</span></button>
-        </div>
+        <label class="field-card field-passcode">
+          <span class="field-label">Passcode</span>
+          <input name="passcode" autocomplete="off" value="${DEFAULTS.passcode}" />
+        </label>
 
         <p class="status" id="status" role="status"></p>
-        <p class="local-note"><span aria-hidden="true">●</span> この端末内でQRコードを生成します</p>
       </form>
 
       <section class="preview" aria-label="Generated QR code">
-        <div class="preview-head">
-          <div>
-            <p class="eyebrow">QR Output</p>
-            <h2 id="preview-title">${DEFAULTS.topic}</h2>
-          </div>
-          <span class="badge">READY</span>
-        </div>
         <div class="qr-stage">
           <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom meeting QR code"></canvas>
         </div>
-        <div class="output-meta">
-          <p><span>Meeting ID</span><strong id="meeting-id">${DEFAULTS.meetingId}</strong></p>
-          <p class="join-url" id="join-url"></p>
-        </div>
-        <div class="download-row">
+        <div class="output-bottom">
           <div>
-            <span class="download-label">Download</span>
-            <strong>PNG / 高解像度</strong>
+            <strong id="meeting-id">${DEFAULTS.meetingId}</strong>
+            <span>Active Session</span>
           </div>
-          <button class="download-button" type="button" id="download-button">保存 <span aria-hidden="true">↓</span></button>
+          <button class="download-button" type="button" id="download-button" title="PNGを保存" aria-label="PNGを保存"><span aria-hidden="true">↓</span></button>
         </div>
+        <p class="join-url" id="join-url"></p>
       </section>
     </section>
+    <footer class="bottom-actions">
+      <button class="reset-button" type="button" id="reset-button" title="すべての入力をリセット">Clear All <span aria-hidden="true">↗</span></button>
+    </footer>
   </main>
 `;
 
@@ -90,7 +62,6 @@ const form = document.querySelector("#qr-form");
 const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
 const joinUrlText = document.querySelector("#join-url");
-const previewTitle = document.querySelector("#preview-title");
 const meetingIdText = document.querySelector("#meeting-id");
 const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
@@ -128,18 +99,15 @@ updateQr();
 function updateQr() {
   const formData = new FormData(form);
   const values = Object.fromEntries(formData.entries());
-  const topic = values.topic.trim() || "Zoom Meeting";
 
   try {
     const joinUrl = buildZoomJoinUrl(values);
     renderZoomQr(canvas, joinUrl);
-    previewTitle.textContent = topic;
     meetingIdText.textContent = values.meetingId.trim() || "URLから接続";
     joinUrlText.textContent = joinUrl;
     status.textContent = "QR を生成しました。";
     status.dataset.state = "ok";
   } catch (error) {
-    previewTitle.textContent = topic;
     joinUrlText.textContent = "";
     status.textContent = error.message;
     status.dataset.state = "error";
