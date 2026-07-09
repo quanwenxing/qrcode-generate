@@ -174,30 +174,34 @@ canvas {
 .output-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 7px;
 }
 
 .copy-button,
 .download-button {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(27, 24, 29, 0.34);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.16);
   color: #1b181d;
-  font-size: 1.72rem;
+  font-size: 0.72rem;
+  font-weight: 850;
   line-height: 1;
+  white-space: nowrap;
 }
 
-.copy-button {
-  font-size: 1.28rem;
+.button-icon {
+  font-size: 1.15rem;
+  font-weight: 500;
 }
 
 .copy-button:hover,
 .download-button:hover {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.36);
 }
 
 .join-url {
