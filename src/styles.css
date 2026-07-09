@@ -177,27 +177,6 @@ canvas {
   gap: 4px;
 }
 
-.output-bottom div {
-  display: grid;
-  gap: 7px;
-}
-
-.output-bottom strong {
-  min-height: 12px;
-  color: #1a181d;
-  font-size: 0.86rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.output-bottom div span {
-  color: rgba(26, 24, 29, 0.62);
-  font-size: 0.62rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .copy-button,
 .download-button {
   display: grid;

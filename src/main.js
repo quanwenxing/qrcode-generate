@@ -38,10 +38,6 @@ document.querySelector("#app").innerHTML = `
           <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom meeting QR code"></canvas>
         </div>
         <div class="output-bottom">
-          <div>
-            <strong id="meeting-id">${DEFAULTS.meetingId}</strong>
-            <span>Active Session</span>
-          </div>
           <div class="output-actions">
             <button class="copy-button" type="button" id="copy-button" title="参加URLをコピー" aria-label="参加URLをコピー"><span aria-hidden="true">⧉</span></button>
             <button class="download-button" type="button" id="download-button" title="PNGを保存" aria-label="PNGを保存"><span aria-hidden="true">↓</span></button>
@@ -60,7 +56,6 @@ const form = document.querySelector("#qr-form");
 const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
 const joinUrlText = document.querySelector("#join-url");
-const meetingIdText = document.querySelector("#meeting-id");
 const copyButton = document.querySelector("#copy-button");
 const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
@@ -117,7 +112,6 @@ function updateQr() {
   try {
     const joinUrl = buildZoomJoinUrl(values);
     renderZoomQr(canvas, joinUrl);
-    meetingIdText.textContent = values.meetingId.trim() || "URLから接続";
     joinUrlText.textContent = joinUrl;
     status.textContent = "QR を生成しました。";
     status.dataset.state = "ok";
