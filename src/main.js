@@ -47,7 +47,7 @@ document.querySelector("#app").innerHTML = `
       </section>
     </section>
     <footer class="bottom-actions">
-      <button class="reset-button" type="button" id="reset-button" title="すべての入力をリセット">Clear All <span aria-hidden="true">↗</span></button>
+      <button class="reset-button" type="button" id="reset-button" title="すべての入力をリセット">Clear All</button>
     </footer>
   </main>
 `;
