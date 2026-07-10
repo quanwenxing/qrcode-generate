@@ -31,6 +31,9 @@ document.querySelector("#app").innerHTML = `
         </label>
 
         <p class="status" id="status" role="status"></p>
+        <div class="bottom-actions">
+          <button class="reset-button" type="button" id="reset-button" title="すべての入力をクリア">Clear All</button>
+        </div>
       </form>
 
       <section class="preview" aria-label="Generated QR code">
@@ -46,9 +49,6 @@ document.querySelector("#app").innerHTML = `
         <p class="join-url" id="join-url"></p>
       </section>
     </section>
-    <footer class="bottom-actions">
-      <button class="reset-button" type="button" id="reset-button" title="すべての入力をリセット">Clear All</button>
-    </footer>
   </main>
 `;
 
@@ -97,9 +97,9 @@ copyButton.addEventListener("click", async () => {
 });
 
 resetButton.addEventListener("click", () => {
-  form.elements.topic.value = DEFAULTS.topic;
-  form.elements.meetingId.value = DEFAULTS.meetingId;
-  form.elements.passcode.value = DEFAULTS.passcode;
+  form.elements.topic.value = "";
+  form.elements.meetingId.value = "";
+  form.elements.passcode.value = "";
   updateQr();
 });
 
@@ -116,6 +116,7 @@ function updateQr() {
     status.textContent = "QR を生成しました。";
     status.dataset.state = "ok";
   } catch (error) {
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     joinUrlText.textContent = "";
     status.textContent = error.message;
     status.dataset.state = "error";

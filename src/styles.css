@@ -218,7 +218,7 @@ canvas {
 }
 
 .bottom-actions {
-  margin-top: clamp(70px, 14vh, 144px);
+  margin-top: 10px;
 }
 
 .reset-button {
