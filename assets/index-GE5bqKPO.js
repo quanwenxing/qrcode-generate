@@ -22,6 +22,9 @@
         </label>
 
         <p class="status" id="status" role="status"></p>
+        <div class="bottom-actions">
+          <button class="reset-button" type="button" id="reset-button" title="すべての入力をクリア">Clear All</button>
+        </div>
       </form>
 
       <section class="preview" aria-label="Generated QR code">
@@ -37,8 +40,5 @@
         <p class="join-url" id="join-url"></p>
       </section>
     </section>
-    <footer class="bottom-actions">
-      <button class="reset-button" type="button" id="reset-button" title="すべての入力をリセット">Clear All</button>
-    </footer>
   </main>
-`;var F=document.querySelector(`#qr-form`),I=document.querySelector(`#qr-canvas`),L=document.querySelector(`#status`),R=document.querySelector(`#join-url`),z=document.querySelector(`#copy-button`),B=document.querySelector(`#download-button`),V=document.querySelector(`#reset-button`);F.addEventListener(`submit`,e=>{e.preventDefault(),H()}),F.addEventListener(`input`,()=>{H()}),document.addEventListener(`center-logo-ready`,()=>{H()}),B.addEventListener(`click`,()=>{let e=document.createElement(`a`);e.download=U(F.elements.topic.value),e.href=I.toDataURL(`image/png`),e.click()}),z.addEventListener(`click`,async()=>{try{let e=M(Object.fromEntries(new FormData(F).entries()));if(!navigator.clipboard?.writeText)throw Error(`このブラウザではクリップボードにコピーできません。`);await navigator.clipboard.writeText(e),L.textContent=`参加URLをコピーしました。`,L.dataset.state=`ok`}catch(e){L.textContent=e.message||`参加URLをコピーできませんでした。`,L.dataset.state=`error`}}),V.addEventListener(`click`,()=>{F.elements.topic.value=P.topic,F.elements.meetingId.value=P.meetingId,F.elements.passcode.value=P.passcode,H()}),H();function H(){let e=new FormData(F),t=Object.fromEntries(e.entries());try{let e=M(t);C(I,e),R.textContent=e,L.textContent=`QR を生成しました。`,L.dataset.state=`ok`}catch(e){R.textContent=``,L.textContent=e.message,L.dataset.state=`error`}}function U(e){return`${(e.trim()||`zoom-meeting`).toLowerCase().replace(/[^a-z0-9\u3040-\u30ff\u3400-\u9fff]+/gi,`-`).replace(/^-+|-+$/g,``)||`zoom-meeting`}-qr.png`}
+`;var F=document.querySelector(`#qr-form`),I=document.querySelector(`#qr-canvas`),L=document.querySelector(`#status`),R=document.querySelector(`#join-url`),z=document.querySelector(`#copy-button`),B=document.querySelector(`#download-button`),V=document.querySelector(`#reset-button`);F.addEventListener(`submit`,e=>{e.preventDefault(),H()}),F.addEventListener(`input`,()=>{H()}),document.addEventListener(`center-logo-ready`,()=>{H()}),B.addEventListener(`click`,()=>{let e=document.createElement(`a`);e.download=U(F.elements.topic.value),e.href=I.toDataURL(`image/png`),e.click()}),z.addEventListener(`click`,async()=>{try{let e=M(Object.fromEntries(new FormData(F).entries()));if(!navigator.clipboard?.writeText)throw Error(`このブラウザではクリップボードにコピーできません。`);await navigator.clipboard.writeText(e),L.textContent=`参加URLをコピーしました。`,L.dataset.state=`ok`}catch(e){L.textContent=e.message||`参加URLをコピーできませんでした。`,L.dataset.state=`error`}}),V.addEventListener(`click`,()=>{F.elements.topic.value=``,F.elements.meetingId.value=``,F.elements.passcode.value=``,H()}),H();function H(){let e=new FormData(F),t=Object.fromEntries(e.entries());try{let e=M(t);C(I,e),R.textContent=e,L.textContent=`QR を生成しました。`,L.dataset.state=`ok`}catch(e){I.getContext(`2d`).clearRect(0,0,I.width,I.height),R.textContent=``,L.textContent=e.message,L.dataset.state=`error`}}function U(e){return`${(e.trim()||`zoom-meeting`).toLowerCase().replace(/[^a-z0-9\u3040-\u30ff\u3400-\u9fff]+/gi,`-`).replace(/^-+|-+$/g,``)||`zoom-meeting`}-qr.png`}
