@@ -1,4 +1,5 @@
 import "./styles.css";
+import { copyCanvasPng } from "./clipboard.js";
 import { renderZoomQr } from "./qr-renderer.js";
 import { buildZoomJoinUrl } from "./zoom.js";
 
@@ -12,8 +13,7 @@ const DEFAULTS = {
 document.querySelector("#app").innerHTML = `
   <main class="shell">
     <header class="app-header">
-      <a class="brand" href="./" aria-label="Zoom Linker のホーム">Zoom Linker</a>
-      <span class="status-dot" title="ローカルで動作中" aria-label="ローカルで動作中"></span>
+      <a class="brand" href="./" aria-label="Zoom qrcode-genarete のホーム">Zoom qrcode-genarete</a>
     </header>
 
     <section class="workspace" aria-label="Zoom QR generator">
@@ -42,7 +42,7 @@ document.querySelector("#app").innerHTML = `
         </div>
         <div class="output-bottom">
           <div class="output-actions">
-            <button class="copy-button" type="button" id="copy-button" title="参加URLをコピー"><span class="button-icon" aria-hidden="true">⧉</span><span>コピー</span></button>
+            <button class="copy-button" type="button" id="copy-button" title="QR画像をコピー"><span class="button-icon" aria-hidden="true">⧉</span><span>QRをコピー</span></button>
             <button class="download-button" type="button" id="download-button" title="PNGを保存"><span class="button-icon" aria-hidden="true">↓</span><span>PNG保存</span></button>
           </div>
         </div>
@@ -59,6 +59,7 @@ const joinUrlText = document.querySelector("#join-url");
 const copyButton = document.querySelector("#copy-button");
 const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
+let hasGeneratedQr = false;
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -82,16 +83,15 @@ downloadButton.addEventListener("click", () => {
 
 copyButton.addEventListener("click", async () => {
   try {
-    const values = Object.fromEntries(new FormData(form).entries());
-    const joinUrl = buildZoomJoinUrl(values);
-    if (!navigator.clipboard?.writeText) {
-      throw new Error("このブラウザではクリップボードにコピーできません。");
+    if (!hasGeneratedQr) {
+      throw new Error("先にミーティング ID を入力してください。");
     }
-    await navigator.clipboard.writeText(joinUrl);
-    status.textContent = "参加URLをコピーしました。";
+
+    await copyCanvasPng(canvas);
+    status.textContent = "QR画像をコピーしました。";
     status.dataset.state = "ok";
   } catch (error) {
-    status.textContent = error.message || "参加URLをコピーできませんでした。";
+    status.textContent = error.message || "QR画像をコピーできませんでした。";
     status.dataset.state = "error";
   }
 });
@@ -112,11 +112,13 @@ function updateQr() {
   try {
     const joinUrl = buildZoomJoinUrl(values);
     renderZoomQr(canvas, joinUrl);
+    hasGeneratedQr = true;
     joinUrlText.textContent = joinUrl;
     status.textContent = "QR を生成しました。";
     status.dataset.state = "ok";
   } catch (error) {
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    hasGeneratedQr = false;
     joinUrlText.textContent = "";
     status.textContent = error.message;
     status.dataset.state = "error";
