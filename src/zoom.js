@@ -4,6 +4,20 @@ export function normalizeMeetingId(value) {
   return value.replace(/[^\d]/g, "");
 }
 
+export function formatMeetingId(value) {
+  const digits = normalizeMeetingId(value).slice(0, 11);
+  if (digits.length <= 3) {
+    return digits;
+  }
+  if (digits.length <= 6) {
+    return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+  }
+  if (digits.length <= 10) {
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+  }
+  return `${digits.slice(0, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+}
+
 export function buildZoomJoinUrl({ joinUrl = "", meetingId, passcode }) {
   const trimmedJoinUrl = joinUrl.trim();
   if (trimmedJoinUrl) {

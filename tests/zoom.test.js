@@ -1,9 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { buildZoomJoinUrl, normalizeMeetingId } from "../src/zoom.js";
+import {
+  buildZoomJoinUrl,
+  formatMeetingId,
+  normalizeMeetingId,
+} from "../src/zoom.js";
 
 describe("normalizeMeetingId", () => {
   it("keeps only digits", () => {
     expect(normalizeMeetingId("123 456-7890")).toBe("1234567890");
+  });
+});
+
+describe("formatMeetingId", () => {
+  it.each([
+    ["123456789", "123 456 789"],
+    ["1234567890", "123 456 7890"],
+    ["12345678901", "123 4567 8901"],
+    ["123-4567-8901", "123 4567 8901"],
+  ])("formats %s for readability", (value, expected) => {
+    expect(formatMeetingId(value)).toBe(expected);
   });
 });
 

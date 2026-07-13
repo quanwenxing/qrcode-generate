@@ -1,7 +1,11 @@
 import "./styles.css";
 import { copyCanvasPng } from "./clipboard.js";
 import { renderZoomQr } from "./qr-renderer.js";
-import { buildZoomJoinUrl, normalizeMeetingId } from "./zoom.js";
+import {
+  buildZoomJoinUrl,
+  formatMeetingId,
+  normalizeMeetingId,
+} from "./zoom.js";
 
 const DEFAULTS = {
   meetingId: "",
@@ -76,7 +80,14 @@ form.addEventListener("submit", (event) => {
   updateQr();
 });
 
-form.addEventListener("input", () => {
+form.addEventListener("input", (event) => {
+  if (
+    event.target === form.elements.meetingId &&
+    !/[^\d\s-]/.test(event.target.value)
+  ) {
+    event.target.value = formatMeetingId(event.target.value);
+  }
+
   hasInteracted = true;
   clearStatus();
   clearTimeout(updateTimer);
