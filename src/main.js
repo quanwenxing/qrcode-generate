@@ -37,7 +37,7 @@ document.querySelector("#app").innerHTML = `
         </label>
 
         <div class="bottom-actions">
-          <button class="reset-button" type="button" id="reset-button"><span class="reset-icon" aria-hidden="true">↺</span><span>入力をクリア</span></button>
+          <button class="reset-button" type="button" id="reset-button"><span class="reset-icon" aria-hidden="true">↺</span><span>クリア</span></button>
         </div>
       </form>
 
@@ -47,15 +47,15 @@ document.querySelector("#app").innerHTML = `
         <div class="qr-stage">
           <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom会議のQRコード"></canvas>
         </div>
-        <div class="join-url-row" id="join-url-row" hidden>
-          <a class="join-url" id="join-url" target="_blank" rel="noopener noreferrer"></a>
-          <button class="copy-url-button" type="button" id="copy-url-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>URLをコピー</span></button>
-        </div>
         <div class="output-bottom">
           <div class="output-actions">
             <button class="copy-button" type="button" id="copy-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>QRをコピー</span></button>
             <button class="download-button" type="button" id="download-button" disabled><span class="button-icon" aria-hidden="true">↓</span><span>PNG保存</span></button>
           </div>
+        </div>
+        <div class="join-url-row" id="join-url-row" hidden>
+          <a class="join-url" id="join-url" target="_blank" rel="noopener noreferrer"></a>
+          <button class="copy-url-button" type="button" id="copy-url-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>URLをコピー</span></button>
         </div>
       </section>
     </section>

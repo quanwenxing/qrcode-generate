@@ -39,19 +39,16 @@ function drawCenterLogo(ctx, size, cell) {
     return;
   }
 
-  const logoWidth = Math.min(cell * 6, size * 0.18);
+  const logoBoxSize = Math.min(cell * 6.5, size * 0.17);
+  const logoWidth = logoBoxSize * 0.95;
   const logoHeight = logoWidth * (centerLogo.naturalHeight / centerLogo.naturalWidth);
-  const padding = cell * 0.65;
+  const boxX = (size - logoBoxSize) / 2;
+  const boxY = (size - logoBoxSize) / 2;
   const x = (size - logoWidth) / 2;
   const y = (size - logoHeight) / 2;
 
   ctx.fillStyle = WHITE;
-  ctx.fillRect(
-    x - padding,
-    y - padding,
-    logoWidth + padding * 2,
-    logoHeight + padding * 2,
-  );
+  ctx.fillRect(boxX, boxY, logoBoxSize, logoBoxSize);
   ctx.drawImage(centerLogo, x, y, logoWidth, logoHeight);
 }
 
