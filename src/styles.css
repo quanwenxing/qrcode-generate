@@ -65,8 +65,9 @@ button {
 
 .field-card {
   display: grid;
+  grid-template-rows: auto 46px 16px;
   gap: 12px;
-  min-height: 128px;
+  height: 142px;
   padding: 23px 24px 17px;
   border-radius: 32px;
 }
@@ -135,8 +136,15 @@ input {
   background: rgba(23, 23, 25, 0.16);
 }
 
-.field-error {
+.field-error,
+.field-helper {
   min-height: 16px;
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.field-error {
   color: #6d1818;
   font-size: 0.69rem;
   font-weight: 750;
@@ -155,10 +163,12 @@ input:focus {
 .preview {
   position: relative;
   display: grid;
-  min-height: 514px;
-  place-items: center;
+  grid-template-rows: minmax(320px, 1fr) auto auto;
+  gap: 18px;
+  min-height: 600px;
+  align-items: center;
   overflow: hidden;
-  padding: 46px;
+  padding: 54px 32px 24px;
   border-radius: 32px;
   background: #af97cf;
 }
@@ -217,6 +227,7 @@ input:focus {
   padding: 14px;
   border-radius: 46% 54% 51% 49% / 51% 43% 57% 49%;
   background: #faf8ff;
+  justify-self: center;
 }
 
 canvas {
@@ -227,14 +238,10 @@ canvas {
 }
 
 .output-bottom {
-  position: absolute;
-  right: 24px;
-  bottom: 22px;
-  left: 24px;
   display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 20px;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .output-actions {
@@ -244,7 +251,8 @@ canvas {
 }
 
 .copy-button,
-.download-button {
+.download-button,
+.copy-url-button {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -262,7 +270,8 @@ canvas {
 }
 
 .copy-button:disabled,
-.download-button:disabled {
+.download-button:disabled,
+.copy-url-button:disabled {
   border-bottom-color: transparent;
   color: rgba(27, 24, 29, 0.3);
   cursor: not-allowed;
@@ -277,41 +286,76 @@ canvas {
 }
 
 .copy-button:hover,
-.download-button:hover {
+.download-button:hover,
+.copy-url-button:hover {
   border-bottom-color: #1b181d;
   color: #1b181d;
 }
 
 .copy-button:disabled:hover,
-.download-button:disabled:hover {
+.download-button:disabled:hover,
+.copy-url-button:disabled:hover {
   border-bottom-color: transparent;
   color: rgba(27, 24, 29, 0.3);
 }
 
 .join-url {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
+  min-width: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  color: rgba(27, 24, 29, 0.82);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration-color: rgba(27, 24, 29, 0.35);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.join-url:hover {
+  color: #171519;
+  text-decoration-color: #171519;
+}
+
+.join-url-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid rgba(27, 24, 29, 0.18);
+  border-bottom: 1px solid rgba(27, 24, 29, 0.18);
+}
+
+.join-url-row[hidden] {
+  display: none;
+}
+
 .bottom-actions {
-  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 
 .reset-button {
   min-height: 44px;
-  border: 1px solid #4a4a4d;
-  border-radius: 999px;
-  padding: 0 15px;
-  background: transparent;
-  color: #e9e8ea;
+  border: 1px solid #343438;
+  border-radius: 9px;
+  padding: 0 14px 0 12px;
+  background: #202023;
+  color: #f2f1f3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.74rem;
   font-weight: 850;
   letter-spacing: 0.05em;
+}
+
+.reset-icon {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1;
 }
 
 button:focus-visible,
@@ -341,7 +385,8 @@ input:focus-visible {
   }
 
   .preview {
-    min-height: min(100vw, 410px);
+    grid-template-rows: minmax(280px, 1fr) auto auto;
+    min-height: 520px;
   }
 
   .bottom-actions {
@@ -351,13 +396,14 @@ input:focus-visible {
 
 @media (max-width: 420px) {
   .field-card {
-    min-height: 122px;
+    height: 136px;
     padding: 20px 20px 15px;
     border-radius: 26px;
   }
 
   .preview {
-    padding: 30px;
+    min-height: 500px;
+    padding: 46px 20px 20px;
     border-radius: 26px;
   }
 
@@ -365,9 +411,8 @@ input:focus-visible {
     width: min(100%, 250px);
   }
 
-  .output-bottom {
-    right: 20px;
-    bottom: 14px;
-    left: 20px;
+  .join-url-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
   }
 }

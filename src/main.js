@@ -1,5 +1,5 @@
 import "./styles.css";
-import { copyCanvasPng } from "./clipboard.js";
+import { copyCanvasPng, copyText } from "./clipboard.js";
 import { renderZoomQr } from "./qr-renderer.js";
 import {
   buildZoomJoinUrl,
@@ -33,10 +33,11 @@ document.querySelector("#app").innerHTML = `
             <input name="passcode" type="password" autocomplete="off" maxlength="64" placeholder="パスコードを入力" />
             <button class="visibility-button" type="button" id="visibility-button" aria-label="パスコードを表示">表示</button>
           </span>
+          <span class="field-helper" aria-hidden="true">&nbsp;</span>
         </label>
 
         <div class="bottom-actions">
-          <button class="reset-button" type="button" id="reset-button">すべてクリア</button>
+          <button class="reset-button" type="button" id="reset-button"><span class="reset-icon" aria-hidden="true">↺</span><span>入力をクリア</span></button>
         </div>
       </form>
 
@@ -46,13 +47,16 @@ document.querySelector("#app").innerHTML = `
         <div class="qr-stage">
           <canvas id="qr-canvas" width="960" height="960" aria-label="Zoom会議のQRコード"></canvas>
         </div>
+        <div class="join-url-row" id="join-url-row" hidden>
+          <a class="join-url" id="join-url" target="_blank" rel="noopener noreferrer"></a>
+          <button class="copy-url-button" type="button" id="copy-url-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>URLをコピー</span></button>
+        </div>
         <div class="output-bottom">
           <div class="output-actions">
             <button class="copy-button" type="button" id="copy-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>QRをコピー</span></button>
             <button class="download-button" type="button" id="download-button" disabled><span class="button-icon" aria-hidden="true">↓</span><span>PNG保存</span></button>
           </div>
         </div>
-        <p class="join-url" id="join-url"></p>
       </section>
     </section>
   </main>
@@ -62,6 +66,8 @@ const form = document.querySelector("#qr-form");
 const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
 const joinUrlText = document.querySelector("#join-url");
+const joinUrlRow = document.querySelector("#join-url-row");
+const copyUrlButton = document.querySelector("#copy-url-button");
 const meetingIdError = document.querySelector("#meeting-id-error");
 const preview = document.querySelector("#preview");
 const copyButton = document.querySelector("#copy-button");
@@ -69,6 +75,7 @@ const downloadButton = document.querySelector("#download-button");
 const resetButton = document.querySelector("#reset-button");
 const visibilityButton = document.querySelector("#visibility-button");
 let hasGeneratedQr = false;
+let currentJoinUrl = "";
 let hasInteracted = false;
 let updateTimer;
 let statusTimer;
@@ -125,6 +132,19 @@ copyButton.addEventListener("click", async () => {
   }
 });
 
+copyUrlButton.addEventListener("click", async () => {
+  try {
+    if (!currentJoinUrl) {
+      throw new Error("先にミーティング ID を入力してください。");
+    }
+
+    await copyText(currentJoinUrl);
+    showStatus("接続URLをコピーしました。", "ok");
+  } catch (error) {
+    showStatus(error.message || "接続URLをコピーできませんでした。", "error");
+  }
+});
+
 resetButton.addEventListener("click", () => {
   clearTimeout(updateTimer);
   form.reset();
@@ -160,7 +180,12 @@ function updateQr() {
     meetingIdError.textContent = "";
     copyButton.disabled = false;
     downloadButton.disabled = false;
+    copyUrlButton.disabled = false;
+    currentJoinUrl = joinUrl;
     joinUrlText.textContent = joinUrl;
+    joinUrlText.href = joinUrl;
+    joinUrlText.title = joinUrl;
+    joinUrlRow.hidden = false;
   } catch (error) {
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     hasGeneratedQr = false;
@@ -168,7 +193,12 @@ function updateQr() {
     meetingIdError.textContent = hasInteracted ? error.message : "";
     copyButton.disabled = true;
     downloadButton.disabled = true;
+    copyUrlButton.disabled = true;
+    currentJoinUrl = "";
     joinUrlText.textContent = "";
+    joinUrlText.removeAttribute("href");
+    joinUrlText.removeAttribute("title");
+    joinUrlRow.hidden = true;
   }
 }
 
