@@ -16,6 +16,18 @@ npm run build
 npm run preview
 ```
 
+## サーバーなしのオフライン利用
+
+JavaScript、CSS、QR生成ライブラリを1つのHTMLへ埋め込んだオフライン版を生成できます。
+
+```bash
+npm run build:offline
+```
+
+生成される `offline/Zoom-QR-Generator.html` をダブルクリックしてブラウザで開いてください。ファイル単体で配布でき、QR生成時にWebサーバーやインターネット接続は不要です。
+
+ブラウザが `file://` でのクリップボード操作を制限する場合、QR画像やURLのコピーボタンは使用できません。その場合もQR生成とPNG保存は利用できます。
+
 ## デプロイ
 
 GitHub Pages または Cloudflare Pages では、ビルドコマンドに `npm run build`、公開ディレクトリに `dist` を指定してください。
