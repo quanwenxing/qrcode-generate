@@ -12,6 +12,7 @@ const DEFAULTS = {
   passcode: "",
 };
 const UPDATE_DELAY = 200;
+const EMAIL_COPY_SIZE = 360;
 
 document.querySelector("#app").innerHTML = `
   <main class="shell">
@@ -114,7 +115,9 @@ copyButton.addEventListener("click", async () => {
       throw new Error("先にミーティング ID を入力してください。");
     }
 
-    await copyCanvasPng(canvas);
+    const emailCanvas = document.createElement("canvas");
+    renderZoomQr(emailCanvas, currentJoinUrl, { size: EMAIL_COPY_SIZE });
+    await copyCanvasPng(emailCanvas);
     showStatus("QR画像をコピーしました。", "ok");
   } catch (error) {
     showStatus(error.message || "QR画像をコピーできませんでした。", "error");
