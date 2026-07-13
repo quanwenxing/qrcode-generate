@@ -139,7 +139,6 @@ input:focus {
   padding: 14px;
   border-radius: 46% 54% 51% 49% / 51% 43% 57% 49%;
   background: #faf8ff;
-  transform: rotate(-6deg);
 }
 
 canvas {
