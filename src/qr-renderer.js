@@ -24,45 +24,74 @@ export function renderZoomQr(canvas, payload, options = {}) {
 
   drawDataModules(ctx, qr, count, cell, offset);
   drawFinders(ctx, count, cell, offset);
-  drawDinosaurMark(ctx, size, cell);
+  drawEarthMark(ctx, size, cell);
 }
 
-function drawDinosaurMark(ctx, size, cell) {
+function drawEarthMark(ctx, size, cell) {
   const logoBoxSize = Math.min(cell * 6.5, size * 0.17);
   const boxX = (size - logoBoxSize) / 2;
   const boxY = (size - logoBoxSize) / 2;
+  const centerX = size / 2;
+  const centerY = size / 2;
+  const globeRadius = logoBoxSize * 0.39;
 
   ctx.fillStyle = WHITE;
   ctx.fillRect(boxX, boxY, logoBoxSize, logoBoxSize);
 
-  const dinosaur = [
-    "000011110",
-    "000111101",
-    "000111111",
-    "000111000",
-    "101111000",
-    "111111000",
-    "011110000",
-    "001010000",
-    "001001000",
-  ];
-  const pixel = logoBoxSize / 11;
-  const startX = boxX + pixel;
-  const startY = boxY + pixel;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, globeRadius, 0, Math.PI * 2);
+  ctx.clip();
 
-  ctx.fillStyle = BLACK;
-  dinosaur.forEach((row, rowIndex) => {
-    [...row].forEach((value, columnIndex) => {
-      if (value === "1") {
-        ctx.fillRect(
-          startX + columnIndex * pixel,
-          startY + rowIndex * pixel,
-          pixel,
-          pixel,
-        );
-      }
-    });
-  });
+  ctx.fillStyle = "#2478f3";
+  ctx.fillRect(
+    centerX - globeRadius,
+    centerY - globeRadius,
+    globeRadius * 2,
+    globeRadius * 2,
+  );
+
+  ctx.fillStyle = "#47c96f";
+  drawContinent(ctx, centerX, centerY, globeRadius);
+
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+  ctx.lineWidth = Math.max(1, globeRadius * 0.07);
+  ctx.beginPath();
+  ctx.ellipse(centerX, centerY, globeRadius * 0.46, globeRadius, 0, 0, Math.PI * 2);
+  ctx.moveTo(centerX - globeRadius, centerY);
+  ctx.lineTo(centerX + globeRadius, centerY);
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.strokeStyle = "#145fc8";
+  ctx.lineWidth = Math.max(1, globeRadius * 0.08);
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, globeRadius, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawContinent(ctx, centerX, centerY, radius) {
+  ctx.beginPath();
+  ctx.moveTo(centerX - radius * 0.78, centerY - radius * 0.5);
+  ctx.lineTo(centerX - radius * 0.35, centerY - radius * 0.76);
+  ctx.lineTo(centerX - radius * 0.02, centerY - radius * 0.54);
+  ctx.lineTo(centerX - radius * 0.18, centerY - radius * 0.22);
+  ctx.lineTo(centerX - radius * 0.48, centerY - radius * 0.08);
+  ctx.lineTo(centerX - radius * 0.62, centerY + radius * 0.28);
+  ctx.lineTo(centerX - radius * 0.9, centerY + radius * 0.08);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(centerX + radius * 0.16, centerY - radius * 0.42);
+  ctx.lineTo(centerX + radius * 0.62, centerY - radius * 0.34);
+  ctx.lineTo(centerX + radius * 0.82, centerY - radius * 0.04);
+  ctx.lineTo(centerX + radius * 0.44, centerY + radius * 0.08);
+  ctx.lineTo(centerX + radius * 0.34, centerY + radius * 0.62);
+  ctx.lineTo(centerX + radius * 0.02, centerY + radius * 0.38);
+  ctx.lineTo(centerX - radius * 0.04, centerY + radius * 0.02);
+  ctx.closePath();
+  ctx.fill();
 }
 
 function drawDataModules(ctx, qr, count, cell, offset) {
