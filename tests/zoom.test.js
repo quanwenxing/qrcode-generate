@@ -37,6 +37,24 @@ describe("buildZoomJoinUrl", () => {
     ).toBe("https://zoom.us/j/1234567890");
   });
 
+  it("rejects an invalid meeting ID length", () => {
+    expect(() =>
+      buildZoomJoinUrl({
+        meetingId: "12345678",
+        passcode: "",
+      }),
+    ).toThrow("9〜11桁");
+  });
+
+  it("rejects non-numeric meeting ID characters", () => {
+    expect(() =>
+      buildZoomJoinUrl({
+        meetingId: "123 ABC 7890",
+        passcode: "",
+      }),
+    ).toThrow("数字");
+  });
+
   it("rejects non-Zoom URLs", () => {
     expect(() =>
       buildZoomJoinUrl({

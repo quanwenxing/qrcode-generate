@@ -10,9 +10,18 @@ export function buildZoomJoinUrl({ joinUrl = "", meetingId, passcode }) {
     return normalizeJoinUrl(trimmedJoinUrl);
   }
 
-  const normalizedMeetingId = normalizeMeetingId(meetingId);
-  if (!normalizedMeetingId) {
+  const rawMeetingId = meetingId.trim();
+  if (!rawMeetingId) {
     throw new Error("ミーティング ID を入力してください。");
+  }
+
+  if (/[^\d\s-]/.test(rawMeetingId)) {
+    throw new Error("ミーティング ID は数字で入力してください。");
+  }
+
+  const normalizedMeetingId = normalizeMeetingId(rawMeetingId);
+  if (normalizedMeetingId.length < 9 || normalizedMeetingId.length > 11) {
+    throw new Error("ミーティング ID は9〜11桁で入力してください。");
   }
 
   const url = new URL(`/j/${normalizedMeetingId}`, ZOOM_HOST);
