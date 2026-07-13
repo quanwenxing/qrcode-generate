@@ -51,11 +51,8 @@ document.querySelector("#app").innerHTML = `
           <div class="output-actions">
             <button class="copy-button" type="button" id="copy-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>QRをコピー</span></button>
             <button class="download-button" type="button" id="download-button" disabled><span class="button-icon" aria-hidden="true">↓</span><span>PNG保存</span></button>
+            <button class="copy-url-button" type="button" id="copy-url-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>URLをコピー</span></button>
           </div>
-        </div>
-        <div class="join-url-row" id="join-url-row" hidden>
-          <a class="join-url" id="join-url" target="_blank" rel="noopener noreferrer"></a>
-          <button class="copy-url-button" type="button" id="copy-url-button" disabled><span class="button-icon" aria-hidden="true">⧉</span><span>URLをコピー</span></button>
         </div>
       </section>
     </section>
@@ -65,8 +62,6 @@ document.querySelector("#app").innerHTML = `
 const form = document.querySelector("#qr-form");
 const canvas = document.querySelector("#qr-canvas");
 const status = document.querySelector("#status");
-const joinUrlText = document.querySelector("#join-url");
-const joinUrlRow = document.querySelector("#join-url-row");
 const copyUrlButton = document.querySelector("#copy-url-button");
 const meetingIdError = document.querySelector("#meeting-id-error");
 const preview = document.querySelector("#preview");
@@ -176,10 +171,6 @@ function updateQr() {
     downloadButton.disabled = false;
     copyUrlButton.disabled = false;
     currentJoinUrl = joinUrl;
-    joinUrlText.textContent = joinUrl;
-    joinUrlText.href = joinUrl;
-    joinUrlText.title = joinUrl;
-    joinUrlRow.hidden = false;
   } catch (error) {
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     hasGeneratedQr = false;
@@ -189,10 +180,6 @@ function updateQr() {
     downloadButton.disabled = true;
     copyUrlButton.disabled = true;
     currentJoinUrl = "";
-    joinUrlText.textContent = "";
-    joinUrlText.removeAttribute("href");
-    joinUrlText.removeAttribute("title");
-    joinUrlRow.hidden = true;
   }
 }
 

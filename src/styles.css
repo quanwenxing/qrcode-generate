@@ -163,10 +163,11 @@ input:focus {
 .preview {
   position: relative;
   display: grid;
-  grid-template-rows: minmax(320px, 1fr) auto auto;
+  grid-template-rows: auto auto;
   gap: 18px;
   min-height: 600px;
   align-items: center;
+  align-content: center;
   overflow: hidden;
   padding: 54px 32px 24px;
   border-radius: 32px;
@@ -299,38 +300,6 @@ canvas {
   color: rgba(27, 24, 29, 0.3);
 }
 
-.join-url {
-  min-width: 0;
-  overflow: hidden;
-  color: rgba(27, 24, 29, 0.82);
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.4;
-  text-decoration-color: rgba(27, 24, 29, 0.35);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.join-url:hover {
-  color: #171519;
-  text-decoration-color: #171519;
-}
-
-.join-url-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  width: 100%;
-  min-height: 52px;
-  align-items: center;
-  gap: 16px;
-  border-top: 1px solid rgba(27, 24, 29, 0.18);
-  border-bottom: 1px solid rgba(27, 24, 29, 0.18);
-}
-
-.join-url-row[hidden] {
-  display: none;
-}
-
 .bottom-actions {
   display: flex;
   justify-content: flex-end;
@@ -385,7 +354,7 @@ input:focus-visible {
   }
 
   .preview {
-    grid-template-rows: minmax(280px, 1fr) auto auto;
+    grid-template-rows: auto auto;
     min-height: 520px;
   }
 
@@ -411,8 +380,7 @@ input:focus-visible {
     width: min(100%, 250px);
   }
 
-  .join-url-row {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .output-actions {
     gap: 10px;
   }
 }
