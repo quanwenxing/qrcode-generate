@@ -1,15 +1,8 @@
 import qrcode from "qrcode-generator";
-import centerLogoUrl from "../assets/nplus-logo.png";
 
 const QR_COLOR = "#050505";
 const BLACK = "#050505";
 const WHITE = "#ffffff";
-
-const centerLogo = new Image();
-centerLogo.src = centerLogoUrl;
-centerLogo.addEventListener("load", () => {
-  document.dispatchEvent(new CustomEvent("center-logo-ready"));
-});
 
 export function renderZoomQr(canvas, payload, options = {}) {
   const size = options.size ?? 960;
@@ -31,25 +24,45 @@ export function renderZoomQr(canvas, payload, options = {}) {
 
   drawDataModules(ctx, qr, count, cell, offset);
   drawFinders(ctx, count, cell, offset);
-  drawCenterLogo(ctx, size, cell);
+  drawDinosaurMark(ctx, size, cell);
 }
 
-function drawCenterLogo(ctx, size, cell) {
-  if (!centerLogo.complete || centerLogo.naturalWidth === 0) {
-    return;
-  }
-
+function drawDinosaurMark(ctx, size, cell) {
   const logoBoxSize = Math.min(cell * 6.5, size * 0.17);
-  const logoWidth = logoBoxSize * 0.95;
-  const logoHeight = logoWidth * (centerLogo.naturalHeight / centerLogo.naturalWidth);
   const boxX = (size - logoBoxSize) / 2;
   const boxY = (size - logoBoxSize) / 2;
-  const x = (size - logoWidth) / 2;
-  const y = (size - logoHeight) / 2;
 
   ctx.fillStyle = WHITE;
   ctx.fillRect(boxX, boxY, logoBoxSize, logoBoxSize);
-  ctx.drawImage(centerLogo, x, y, logoWidth, logoHeight);
+
+  const dinosaur = [
+    "000011110",
+    "000111101",
+    "000111111",
+    "000111000",
+    "101111000",
+    "111111000",
+    "011110000",
+    "001010000",
+    "001001000",
+  ];
+  const pixel = logoBoxSize / 11;
+  const startX = boxX + pixel;
+  const startY = boxY + pixel;
+
+  ctx.fillStyle = BLACK;
+  dinosaur.forEach((row, rowIndex) => {
+    [...row].forEach((value, columnIndex) => {
+      if (value === "1") {
+        ctx.fillRect(
+          startX + columnIndex * pixel,
+          startY + rowIndex * pixel,
+          pixel,
+          pixel,
+        );
+      }
+    });
+  });
 }
 
 function drawDataModules(ctx, qr, count, cell, offset) {
@@ -61,7 +74,15 @@ function drawDataModules(ctx, qr, count, cell, offset) {
         continue;
       }
 
-      ctx.fillRect(offset + col * cell, offset + row * cell, cell, cell);
+      const inset = cell * 0.025;
+      drawRoundedRect(
+        ctx,
+        offset + col * cell + inset,
+        offset + row * cell + inset,
+        cell - inset * 2,
+        cell - inset * 2,
+        cell * 0.18,
+      );
     }
   }
 }
@@ -86,18 +107,35 @@ function drawFinder(ctx, x, y, cell) {
   const centerInset = cell * 2;
 
   ctx.fillStyle = BLACK;
-  ctx.fillRect(x, y, outer, outer);
+  drawRoundedRect(ctx, x, y, outer, outer, cell * 1.25);
 
   ctx.fillStyle = WHITE;
-  ctx.fillRect(x + inset, y + inset, outer - inset * 2, outer - inset * 2);
+  drawRoundedRect(
+    ctx,
+    x + inset,
+    y + inset,
+    outer - inset * 2,
+    outer - inset * 2,
+    cell * 0.75,
+  );
 
   ctx.fillStyle = BLACK;
-  ctx.fillRect(
+  drawRoundedRect(
+    ctx,
     x + centerInset,
     y + centerInset,
     outer - centerInset * 2,
     outer - centerInset * 2,
+    cell * 0.45,
   );
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+  const safeRadius = Math.min(radius, width / 2, height / 2);
+
+  ctx.beginPath();
+  ctx.roundRect(x, y, width, height, safeRadius);
+  ctx.fill();
 }
 
 function isFinderZone(row, col, count) {

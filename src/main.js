@@ -101,12 +101,6 @@ form.addEventListener("input", (event) => {
   updateTimer = setTimeout(updateQr, UPDATE_DELAY);
 });
 
-document.addEventListener("center-logo-ready", () => {
-  if (hasGeneratedQr) {
-    updateQr();
-  }
-});
-
 downloadButton.addEventListener("click", () => {
   if (!hasGeneratedQr) {
     return;
