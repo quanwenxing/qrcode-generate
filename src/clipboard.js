@@ -8,7 +8,7 @@ export async function copyCanvasPng(canvas, options = {}) {
     throw new Error("このブラウザではQR画像をコピーできません。");
   }
 
-  const image = await canvasToPng(canvas);
+  const image = canvasToPng(canvas);
   await clipboard.write([
     new ClipboardItemConstructor({ "image/png": image }),
   ]);

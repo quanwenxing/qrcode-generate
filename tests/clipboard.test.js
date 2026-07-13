@@ -4,26 +4,37 @@ import { copyCanvasPng, copyText } from "../src/clipboard.js";
 describe("copyCanvasPng", () => {
   it("writes the rendered QR as a PNG clipboard item", async () => {
     const image = { type: "image/png" };
+    let finishRendering;
     const canvas = {
       toBlob: vi.fn((callback, type) => {
         expect(type).toBe("image/png");
-        callback(image);
+        finishRendering = callback;
       }),
     };
-    const clipboard = { write: vi.fn() };
+    const clipboard = {
+      write: vi.fn(async ([item]) => {
+        expect(await item.items["image/png"]).toBe(image);
+      }),
+    };
     class FakeClipboardItem {
       constructor(items) {
         this.items = items;
       }
     }
 
-    await copyCanvasPng(canvas, {
+    const copying = copyCanvasPng(canvas, {
       clipboard,
       ClipboardItemConstructor: FakeClipboardItem,
     });
 
+    expect(clipboard.write).toHaveBeenCalledOnce();
+    finishRendering(image);
+    await copying;
+
     expect(clipboard.write).toHaveBeenCalledWith([
-      expect.objectContaining({ items: { "image/png": image } }),
+      expect.objectContaining({
+        items: { "image/png": expect.any(Promise) },
+      }),
     ]);
   });
 });
