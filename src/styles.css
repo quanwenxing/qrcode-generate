@@ -241,7 +241,7 @@ canvas {
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .output-actions {
